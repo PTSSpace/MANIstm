@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  *
  * @section DESCRIPTION
- * 
+ *
  * A PID controller is a widely used feedback controller commonly found in
  * industry.
  *
@@ -110,7 +110,7 @@ public:
      * called on a manual to auto transition.
      */
     void reset(void);
-    
+
     /**
      * Set PID to manual or auto mode.
      *
@@ -118,28 +118,28 @@ public:
      *             Non-zero -> Auto
      */
     void setMode(int mode);
-    
+
     /**
      * Set how fast the PID loop is run.
      *
      * @param interval PID calculation peformed every interval seconds.
      */
     void setInterval(float interval);
-    
+
     /**
      * Set the set point.
      *
      * @param sp The set point as a real world value.
      */
     void setSetPoint(float sp);
-    
+
     /**
      * Set the process value.
      *
      * @param pv The process value as a real world value.
      */
     void setProcessValue(float pv);
-    
+
     /**
      * Set the bias.
      *
@@ -173,19 +173,19 @@ private:
     float Kc_;
     float tauR_;
     float tauD_;
-    
+
     //Raw tuning parameters.
     float pParam_;
     float iParam_;
     float dParam_;
-    
+
     //The point we want to reach.
-    float setPoint_;         
+    float setPoint_;
     //The thing we measure.
-    float processVariable_;  
+    float processVariable_;
     float prevProcessVariable_;
     //The output that affects the process variable.
-    float controllerOutput_; 
+    float controllerOutput_;
     float prevControllerOutput_;
 
     //We work in % for calculations so these will scale from
@@ -203,7 +203,7 @@ private:
     float bias_;
 
     //The interval between samples.
-    float tSample_;          
+    float tSample_;
 
     //Controller output as a real world value.
     volatile float realOutput_;

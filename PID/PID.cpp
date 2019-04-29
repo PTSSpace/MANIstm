@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  *
  * @section DESCRIPTION
- * 
+ *
  * A PID controller is a widely used feedback controller commonly found in
  * industry.
  *
@@ -72,7 +72,7 @@ PID::PID(float Kc, float tauI, float tauD, float interval) {
 
     accError_ = 0.0;
     bias_     = 0.0;
-    
+
     realOutput_ = 0.0;
 
 }
@@ -132,7 +132,7 @@ void PID::setTunings(float Kc, float tauI, float tauD) {
     }
 
     //Store raw values to hand back to user on request.
-    pParam_ = Kc;   
+    pParam_ = Kc;
     iParam_ = tauI;
     dParam_ = tauD;
 
@@ -256,7 +256,7 @@ float PID::compute() {
     }
 
     //Perform the PID calculation.
-    controllerOutput_ = scaledBias + Kc_ * (error + (tauR_ * accError_) - (tauD_ * dMeas));
+    controllerOutput_ = scaledBias + Kc_ * error + (tauR_ * accError_) - (tauD_ * dMeas);
 
     //Make sure the computed output is within output constraints.
     if (controllerOutput_ < 0.0) {
