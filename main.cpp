@@ -1,66 +1,183 @@
-#include "mbed.h"
 #include "stm32f103c8t6.h"
+#include "mbed.h"
+
+
+#define DEBUG					1				// Debug output
+
+// Motor control
+#define pulsesPerRev            8384
+#define pulsesPerHalf           4192
+
+// Set motor parameters
+#define MaxVelocity             3                       // Maximal wheel velocity [rps]
+const float MaxVelEnc = MaxVelocity * pulsesPerRev;     // Maximal wheel velocity [encoder pulses per second]
+#define MaxOrientation          180                     // Maximal wheel orientation [deg]
+const float MaxOrEnc = MaxOrientation * pulsesPerRev;   // Maximal wheel orientation [encoder pulses]
+
+
+// Protocol parameters
+#define MaxValue                2147483647      // Maximal signed value for 4 bytes
+
+
+// CAN communication
+#define PUB_RATE                5.0     		// Rate to publish odometry data [s]
+#define FRONT_LEFT           	1       	    // Wheel index ['front_left', 'rear_left', 'rear_right', 'front_right']
+
+#if defined(DEBUG)
+    // Declare LED pin
+    #define LED_PIN     LED1
+#endif
+
 
 /*
- * An example showing how to use the mbed CAN API:
- *
- * Two affordable (about $2 on ebay) STM32F103C8T6 boards (20kB SRAM, 64kB Flash),
- * (see [https://developer.mbed.org/users/hudakz/code/STM32F103C8T6_Hello/] for more details)
- * are connected to the same CAN bus via transceivers (MCP2551 or TJA1040, or etc.).
- * CAN transceivers are not part of NUCLEO boards, therefore must be added by you.
- * Remember also that CAN bus (even a short one) must be terminated with 120 Ohm resitors at both ends.
- *
- *
- * The same code is used for both mbed boards, but:
- *      For board #1 compile the example without any change.
- *      For board #2 comment out line 21 before compiling
- *
- * Once the binaries have been downloaded to the boards reset both boards at the same time.
- *
- */
+Messages with lower numeric values for their ID's
+have higher priority on the CAN network
+*/
 
-#define TARGET_STM32F103C8T6    1       // uncomment this line to use STM32F103C8T6 boards
-
-#define BOARD1                  1       // comment out this line when compiling for board #2
-
-#define PUB_RATE                5.0     // Rate to publish odometry data [s]
-
-#if defined(TARGET_STM32F103C8T6)
-    #define LED_PIN     PC_13
-    const int           OFF = 1;
-    const int           ON = 0;
-#else
-    #define LED_PIN     LED1
-    const int           OFF = 0;
-    const int           ON = 1;
+// Message header ID's:
+#if defined(FRONT_LEFT)
+    // Front left motor controller
+    const uint8_t RX_CMD = 0x0C1;		    // Locomotion command
+    const uint8_t TX_ODM = 0x0D1;		    // Odometry update
+    #if defined(DEBUG)
+        const char wheelIndex[12] = "front_left";  // Wheel index
+    #endif
+#endif
+#if defined(REAR_LEFT)
+    // Rear left motor controller
+    const uint8_t RX_CMD = 0x0C2;		    // Locomotion command
+    const uint8_t TX_ODM = 0x0D2;      	    // Odometry update
+    #if defined(DEBUG)
+        const char wheelIndex[12] = "rear_left";  // Wheel index
+    #endif
+#endif
+#if defined(REAR_RIGHT)
+    // Rear right motor controller
+    const uint8_t RX_CMD = 0x0C3;      	    // Locomotion command
+    const uint8_t TX_ODM = 0x0D3;      	    // Odometry update
+    #if defined(DEBUG)
+        const char wheelIndex[12] = "rear_right";  // Wheel index
+    #endif
+#endif
+#if defined(FRONT_RIGHT)
+    // Front right motor controller
+    const uint8_t RX_CMD = 0x0C4;      	    // Locomotion command
+    const uint8_t TX_ODM = 0x0D4;      	    // Odometry update
+    #if defined(DEBUG)
+        const char wheelIndex[12] = "front_right";  // Wheel index
+    #endif
 #endif
 
-#if defined(BOARD1)
-    const unsigned int  RX_ID = 0x101;
-    const unsigned int  TX_ID = 0x100;
-#else
-    const unsigned int  RX_ID = 0x102;
-    const unsigned int  TX_ID = 0x100;
+
+// UART Serial output
+#if defined(DEBUG)
+	Serial              pc(PB_6, PB_7);		// UART Tx pin name, UART Rx pin name
+	DigitalOut          led(LED_PIN);
 #endif
 
-#include "mbed.h"
-#include "CANMsg.h"
+// CAN interface
+CAN                 can(PB_8, PB_9);  		// CAN Rdx pin name, CAN Tdx pin name
+CANMessage       	rxMsg;
+CANMessage          txMsg;
+volatile bool 		msg_received = 0;
+volatile bool 		msg_sent = 1;
 
-Serial              pc(PB_6, PB_7);
-CAN                 can(PB_8, PB_9);  // CAN Rx pin name, CAN Tx pin name
+
+// Interrupt event queue
+EventQueue 			com_queue;           	// Command queue
+EventQueue 			pub_queue;           	// Publisher queue
+
+// Odometry publisher ticker
 Ticker              publisher;
 
-CANMessage              rxMsg;
-CANMessage              txMsg;
-DigitalOut          led(LED_PIN);
-int               speed = 0.0;
-int               orientation = 0.0;
-volatile bool msg_rx_flag = 0;
 
 
-// create an event queue
-EventQueue com_queue;           // Command queue
-EventQueue pub_queue;           // Publisher queue
+// Working variables
+float 				enc_velocity;           // Velocity [pulses per second]
+float 				enc_orientation;        // Orientation [pulses per second]
+float 				set_velocity;           // [pulses per second]
+float 				set_orientation;        // [pulses per second]
+
+
+// Functions
+int byte_to_int(unsigned char, int, int);
+void int_to_byte(unsigned char, int, int);
+
+void printMsg(CANMessage&);
+void can_publisher_processing (void);
+void can_publisher(void);
+void can_command_processing(void);
+void can_received(void);
+
+
+
+
+// Main function
+int main(void)
+{
+    //confSysClock();     														//Configure the system clock (72MHz HSE clock, 48MHz USB clock)
+
+    // CAN Interface
+    can.mode(CAN::Normal);
+    can.frequency(500000); 														// Set CAN bit rate to 1Mbps
+    can.filter(RX_CMD, 0xFFF, CANStandard, 0); 					// Set filter #0 to accept only standard messages with ID == RX_ID
+
+    Thread commandThread(osPriorityLow);
+    commandThread.start(callback(&com_queue, &EventQueue::dispatch_forever));
+    can.attach(&can_received, CAN::RxIrq);                						// Attach ISR to handle received messages
+
+
+    // TODO interrupt priority
+    publisher.attach(&can_publisher, PUB_RATE);
+
+
+    #if defined(DEBUG)
+    	pc.baud(115200);        // Set serial speed
+    	led = 0;                // Turn on LED for message feedback
+    	pc.printf("CAN Control %s board \r\n", wheelIndex);
+    #endif
+
+    while(1) {
+        // Publish odometry message
+		if (!msg_sent){
+			can_publisher_processing();
+		}
+    }
+    //wait(osWaitForever);
+
+}
+
+// Convert from message unit [0..MaxValue] to encoder unit [pulses]
+float msg_to_enc(int value, bool type){
+	// Scale back to decimal number [0..1]
+	float dec = float(value) /MaxValue;
+	float enc = 0;
+    if (type){
+    	// Convert orientation to [encoder pulses]
+        enc = dec *MaxOrEnc;
+	}
+	else{
+        // Convert velocity to [encoder pulses per second]
+        enc = dec *MaxVelEnc;
+	}
+	return enc;
+}
+
+// Convert from encoder encoder unit [pulses] to message unit [0..MaxValue]
+float enc_to_msg(float value, bool type){
+    float nom = 0;
+	if (type){
+    	// Normalise orientation [encoder pulses] to [0..1]
+        nom = value /MaxOrEnc;
+	}
+	else{
+        // Normalise velocity [encoder pulses per second] to [0..1]
+        nom = value /MaxVelEnc;
+	}
+	// Scale to integer value [0..MaxValue]
+	int scl = int(nom *MaxValue);
+	return scl;
+}
 
 // Convert from byte to integer value
 int byte_to_int(unsigned char byte_array[], int start, int len){
@@ -79,7 +196,7 @@ void int_to_byte(unsigned char byte_array[], int val[], int num_values){
         }
     }
     /*
-    memcpy(txMsg.data, &speed, 4);
+    memcpy(txMsg.data, &velocity, 4);
     memcpy(txMsg.data+4, &orientation, 4)
     */
 }
@@ -98,44 +215,61 @@ void printMsg(CANMessage& msg)
 }
 
 void can_publisher_processing (void){
-    if(can.write(txMsg)) {
-        pc.printf("-------------------------------------\r\n");
-        pc.printf("-------------------------------------\r\n");
-        pc.printf("CAN message sent\r\n");
-        printMsg(txMsg);
-        pc.printf("  speed = %d rps\r\n", speed);
-        pc.printf("  orientation = %d deg\r\n", orientation);
+	txMsg.id = TX_ODM;            			            // Set ID (11 bit)
+	txMsg.len    = 8;									// Length of transfered data [byte]
+	// TODO read in encoder values
+	// Convert data to degrees
+	int velocity = enc_to_msg(enc_velocity, 0);			// velocity  [0..MaxValue]
+	int orientation = enc_to_msg(enc_orientation, 1);	// orientation  [0..MaxValue]
+	// Convert data to bytes
+	int value[2] = {velocity, orientation};
+	int_to_byte(txMsg.data, value, 2);
+	// Write message to CAN bus
+	msg_sent = can.write(txMsg);
 
-    }
-    else
-        pc.printf("Transmission error\r\n");
-    }
+	#if defined(DEBUG)
+	    if(msg_sent) {
+	        pc.printf("-------------------------------------\r\n");
+	        pc.printf("-------------------------------------\r\n");
+	        pc.printf("CAN message sent\r\n");
+	        printMsg(txMsg);
+	        pc.printf("  velocity = %d rps\r\n", velocity);
+	        pc.printf("  orientation = %d deg\r\n", orientation);
+
+	    }
+	    else
+	        pc.printf("Transmission error\r\n");
+	    }
+    #endif
 
 void can_publisher(void){
-    led = !led;
-    txMsg.id = TX_ID;            // set ID
-    // append data (total data length must not exceed 8 bytes!)
-    txMsg.len    = 8;
-    int val[2] = {speed, orientation};
-    int_to_byte(txMsg.data, val, 2);
-    can.write(txMsg);
-    //pub_queue.call(&can_publisher_processing);
+    msg_sent = 0;
 }
 
 // Processing thread outside of interrupt
 void can_command_processing(void)
 {
-    pc.printf("-------------------------------------\r\n");
-    pc.printf("CAN message received\r\n");
-    printMsg(rxMsg);
+	#if defined(DEBUG)
+	    pc.printf("-------------------------------------\r\n");
+	    pc.printf("CAN message received\r\n");
+	    printMsg(rxMsg);
+	#endif
 
-    if (rxMsg.id == RX_ID) { //
-        // extract data from the received CAN message
+	// Check for correct message ID
+    if (rxMsg.id == RX_CMD) {
+        // Extract data from the received CAN message
         // in the same order as it was added on the transmitter side
-        speed = byte_to_int(rxMsg.data, 0, 4);//rxMsg.data[0] | ( (int)rxMsg.data[1] << 8 ) | ( (int)rxMsg.data[2] << 16 ) | ( (int)rxMsg.data[3] << 24 );
-        orientation = byte_to_int(rxMsg.data, 4, 4);;
-        pc.printf("  Set speed = %d rps\r\n", speed);
-        pc.printf("  Set orientation = %d deg\r\n", orientation);
+        int velocity = byte_to_int(rxMsg.data, 0, 4);			// Read first four bytes (velocity  [0.001 rps])
+        int orientation = byte_to_int(rxMsg.data, 4, 4);		// Read second four bytes (orientation  [0.001 rps])
+
+        // Update set point for PID control
+        set_velocity = msg_to_enc(velocity, 0);                 // velocity  [0..EncVelMax]
+        set_orientation = msg_to_enc(orientation, 1);           // velocity  [0..EncOrMax]
+
+        #if defined(DEBUG)
+	        pc.printf("  Set velocity = %d rps\r\n", velocity);
+	        pc.printf("  Set orientation = %d deg\r\n", orientation);
+	    #endif
     }
 }
 
@@ -143,52 +277,11 @@ void can_command_processing(void)
 // can.read must not contain mutex locking
 void can_received(void)
 {
-    //led = !led;
+    #if defined(DEBUG)
+        led = !led;
+    #endif
+	// Read message from CAN bus
     can.read(rxMsg);
+    // Process message outside ISR
     com_queue.call(&can_command_processing);
-
-}
-
-// Main function
-int main(void)
-{
-    confSysClock();     //Configure the system clock (72MHz HSE clock, 48MHz USB clock)
-    pc.baud(115200);          // set serial speed
-    can.mode(CAN::Normal);
-    can.frequency(500000); // set CAN bit rate to 1Mbps
-
-
-    led = ON;
-
-    can.filter(RX_ID, 0xFFF, CANStandard, 0); // set filter #0 to accept only standard messages with ID == RX_ID
-
-    Thread commandThread(osPriorityNormal);
-    commandThread.start(callback(&com_queue, &EventQueue::dispatch_forever));
-    can.attach(&can_received, CAN::RxIrq);                // attach ISR to handle received messages
-
-    //Thread publisherThread(osPriorityLow);
-    //publisherThread.start(callback(&pub_queue, &EventQueue::dispatch_forever));
-    publisher.attach(&can_publisher, PUB_RATE);
-
-#if defined(BOARD1)
-    pc.printf("CAN_Hello board #1\r\n");
-#else
-    pc.printf("CAN_Hello board #2\r\n");
-#endif
-    speed = int(1.9f) * 1000;
-    orientation = int(45.0f) * 1000;
-
-    /*
-    txMsg.len    = 0;
-    txMsg.type   = CANData;
-    txMsg.format = CANStandard;
-    txMsg.id     = 0;
-    memset(txMsg.data, 0, 8);              // clear Tx message storage
-    */
-
-    while(1) {
-        wait(0.2);
-    }
-    //wait(osWaitForever);
-
 }
