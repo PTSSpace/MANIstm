@@ -7,7 +7,7 @@
 // Defines - Flags
 //****************************************************************************/
 
-#define DEBUG					1				    // Debug output
+//#define DEBUG					1				    // Debug output
 #define FRONT_LEFT              1                   // Wheel index ['front_left', 'rear_left', 'rear_right', 'front_right']
 
 // Protocol parameters
@@ -28,8 +28,8 @@
 // Set motor parameters
 #define MaxVelocity             3                                       // Maximal wheel velocity [rps]
 const float MaxVelEnc = MaxVelocity * pulsesPerRev;                     // Maximal wheel velocity [encoder pulses per second]
-#define MaxOrientation          180                                     // Maximal wheel orientation [deg]
-const float MaxOrEnc = MaxOrientation /360.0 * float(pulsesPerRev);     // Maximal wheel orientation [encoder pulses]
+#define MaxOrientation          3.14159265358979323846                  // Maximal wheel orientation [rad]
+const float MaxOrEnc = float(pulsesPerHalf);                            // Maximal wheel orientation [encoder pulses]
 
 
 //-----------------------------------------/
@@ -60,6 +60,8 @@ have higher priority on the CAN network
 // Message header ID's:
 #if defined(FRONT_LEFT)
     // Front left motor controller
+    const uint8_t S_CMD = 0x0A1;                    // Start/stop command
+    const uint8_t I_CMD = 0x0B1;                    // Initialization command
     const uint8_t RX_CMD = 0x0C1;		            // Locomotion command
     const uint8_t TX_ODM = 0x0D1;		            // Odometry update
     #if defined(DEBUG)
@@ -68,6 +70,8 @@ have higher priority on the CAN network
 #endif
 #if defined(REAR_LEFT)
     // Rear left motor controller
+    const uint8_t S_CMD = 0x0A2;                    // Start/stop command
+    const uint8_t I_CMD = 0x0B2;                    // Initialization command
     const uint8_t RX_CMD = 0x0C2;		            // Locomotion command
     const uint8_t TX_ODM = 0x0D2;      	            // Odometry update
     #if defined(DEBUG)
@@ -76,6 +80,8 @@ have higher priority on the CAN network
 #endif
 #if defined(REAR_RIGHT)
     // Rear right motor controller
+    const uint8_t S_CMD = 0x0A3;                    // Start/stop command
+    const uint8_t I_CMD = 0x0B3;                    // Initialization command
     const uint8_t RX_CMD = 0x0C3;      	            // Locomotion command
     const uint8_t TX_ODM = 0x0D3;      	            // Odometry update
     #if defined(DEBUG)
@@ -84,6 +90,8 @@ have higher priority on the CAN network
 #endif
 #if defined(FRONT_RIGHT)
     // Front right motor controller
+    const uint8_t S_CMD = 0x0A4;                    // Start/stop command
+    const uint8_t I_CMD = 0x0B4;                    // Initialization command
     const uint8_t RX_CMD = 0x0C4;      	            // Locomotion command
     const uint8_t TX_ODM = 0x0D4;      	            // Odometry update
     #if defined(DEBUG)
@@ -92,18 +100,35 @@ have higher priority on the CAN network
 #endif
 
 // CAN interface
-CAN                 can(PB_8, PB_9);                // CAN Rdx pin name, CAN Tdx pin name
+const uint8_t MASK = 0x08F;		        // CAN filter mask
+
+// Declaration of unlocked CAN class with disabled mutex locks
+// to be used in the Interrupt Irq
+class UnlockedCAN : public CAN {
+public:
+    UnlockedCAN(PinName rd, PinName td) : CAN(rd, td) { }
+    virtual void lock() { }
+    virtual void unlock() { }
+};
+
+
+UnlockedCAN                 can(PB_8, PB_9);        // CAN Rdx pin name, CAN Tdx pin name
 CANMessage          rxMsg;
 CANMessage          txMsg;
 volatile bool       msg_received = 0;
 volatile bool       msg_sent = 1;
 
+
 // Interrupt event queue
 EventQueue          com_queue;                      // Command queue
+EventQueue          pub_queue;                      // Publisher queue
+EventQueue          pid_queue;                      // PID control queue
+
 
 // Odometry publisher ticker
-Ticker              publisher;
-
+Ticker          pubTick;
+int publisherMode = 0;                              // Publisher status on/off
+int zeroing_encoder = 0;                            // Zeroing encoder status
 
 //-----------------------------------------/
 // PID Position/Velocity Control
@@ -122,21 +147,24 @@ Ticker              publisher;
 #define Pos_Ti    0.0035//0.008 //0.45 //0.0015//expandable //0.65
 #define Pos_Td    0.03//0.02 //0.0 //0.02
 
-// Parameter input
-#define SET_VELOCITY 40.0                           // [deg per second]
-#define SET_POSITION 90.0                           // [deg]
 
 // TODO check
 //#define  MAX_VELOCITY 3000.0                      // pulses per second
 
-Timer           timer;                              // PID call instance
-
+Ticker           pidTick;                          // PID call instance
+volatile bool pid = 0;
+#if defined(DEBUG)
+    int count = 0;
+#endif
 //****************************************************************************/
 // Declaration - Working variables
 //****************************************************************************/
 
-float               set_velocity;                   // [pulses per second]
-float               set_orientation;                // [pulses per second]
+int driveMode = 0;                                  // Drive motor and velocity PID status
+int steerMode = 0;                                  // Steer motor and position PID status
+
+float set_velocity = 0;                                 // [pulses per second]
+float set_orientation = 0;                              // [pulses per second]
 
 // Velocity PID control
 volatile int drivePulses     = 0;
@@ -152,7 +180,7 @@ PID VelocityController(Vel_Kc, Vel_Ti, Vel_Td, RATE);
 // Position control
 volatile int steerPulses     = 0;
 volatile float steerPwmDuty  = 0.0;
-volatile float steerOrientation = 0.0;              // Orientation [pulses per second]
+volatile float steerOrientation = 0.0;              // Orientation [pulses]
 
 PwmOut SteerMotor(PB_0);
 DigitalOut SteerDirection(PB_1);
@@ -177,8 +205,8 @@ PID PositionController(Pos_Kc, Pos_Ti, Pos_Td, RATE);
 #if defined(DEBUG)
     void printMsg(CANMessage&);                         // Serial print CAN message
 #endif
-
 void initializeCanBus(void);                            // Initialization of can objects and interrupts
+void setPublisherMode(void);                            // Turn on/off wheel encoder odometry publisher
 int byte_to_int(unsigned char, int, int);               // Convert byte message to integer
 void int_to_byte(unsigned char, int, int);              // Convert integer to byte message
 void can_publisher_processing (void);                   // Processer for publisher flag
@@ -190,6 +218,11 @@ void can_received(void);                                // CAN message interrupt
 //-----------------------------------------/
 // PID Position/Velocity Control
 //-----------------------------------------/
+void zeroEncoders(void);                                // Zero incremental encoders
+void setDriveMode(void);                                // Set drive mode to on or off
+void setSteerMode(void);                                // Set steer mode to on or off
 void initializeMotors(void);                            // Initiallising motor pins
 void initializePidControllers(void);                    // Set up PID controllers with appropriate limits and biases
 void updateSetPoints(void);                             // Update the PID set points
+void pid_control(void);                                 // PID controller
+void pid_control_processing(void);
