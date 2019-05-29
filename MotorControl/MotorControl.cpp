@@ -8,7 +8,7 @@
  */
 MotorControl::MotorControl(PinName motPin, PinName dirPin, PinName qeiPinA, PinName qeiPinB,
                             float Kc, float tauI, float tauD, float interval, bool pidType) :
-                            QEI(qeiPinA, qeiPinB, NC, pulsesPerRevl, QEI::X4_ENCODING),          // Important 5V tollerant interrupt pins
+                            QEI(qeiPinA, qeiPinB, NC, PULSES_PER_REV, QEI::X4_ENCODING),          // Important 5V tollerant interrupt pins
                             PwmOut(motPin), DigitalOut(dirPin),
                             PID(Kc, tauI, tauD, RATE) {
     // Initialize working variables
@@ -74,7 +74,7 @@ void MotorControl::zero_encoder(void){
     QEI::reset();
     bool stop = 0;
     int enc_val = QEI::getPulses();
-    int prev_enc = enc_val + pulsesPerRevl;
+    int prev_enc = enc_val + PULSES_PER_REV;
     // Set motor direction opposite on both sides
     #if defined(FRONT_LEFT) || defined(REAR_LEFT)
     // Left motor controller

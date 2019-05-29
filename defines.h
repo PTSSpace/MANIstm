@@ -25,14 +25,13 @@
 //-----------------------------------------/
 
 // Motor control
-#define pulsesPerHalf           4192
-#define pulsesPerRevl            8384
+#define PULSES_PER_REV          8384
 
 // Set motor parameters
-#define MaxVelocity             3                                       // Maximal wheel velocity [rps]
-const float MaxVelEnc = MaxVelocity * pulsesPerRevl;                    // Maximal wheel velocity [encoder pulses per second]
+#define MAX_VEL             3                                           // Maximal wheel velocity [rps]
+const float MaxVelEnc = MAX_VEL * PULSES_PER_REV;                       // Maximal wheel velocity [encoder pulses per second]
 #define MaxOrientation          3.14159265358979323846                  // Maximal wheel orientation [rad]
-const float MaxOrEnc = float(pulsesPerHalf);                            // Maximal wheel orientation [encoder pulses]
+const float MaxOrEnc = float(PULSES_PER_REV)/2.0;                       // Maximal wheel orientation [encoder pulses]
 
 // CAN communication
 #define PUB_RATE                5.0     		    // Rate to publish odometry data [s]
