@@ -78,12 +78,12 @@ void MotorControl::zero_encoder(void){
     // Set motor direction opposite on both sides
     #if defined(FRONT_LEFT) || defined(REAR_LEFT)
     // Left motor controller
-        DigitalOut::write(1.0);
+        DigitalOut::write(0.0);
         PwmOut::write(0.15);
     #endif
     #if defined(REAR_RIGHT) || defined(FRONT_RIGHT)
     // Right motor controller
-        DigitalOut::write(0.0);
+        DigitalOut::write(1.0);
         PwmOut::write(0.15);
     #endif
     wait(RATE);
