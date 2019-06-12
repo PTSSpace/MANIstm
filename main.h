@@ -51,10 +51,13 @@ CANMessage          txMsg;
 // CAN interface
 UnlockedCAN                 can(PB_8, PB_9);            // CAN rdx pin name, CAN tdx pin name
 CANInterface                ci;
+DigitalOut          canSTB(PA_8);
+
 
 // Interrupt event queue
 EventQueue          com_queue;                      // Command queue
 Thread commandThread(osPriorityHigh);
+
 
 // Interrupt event queue
 //EventQueue          com_queue_;                                   // Command queue

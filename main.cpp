@@ -8,6 +8,8 @@
 // Main function
 int main(void)
 {
+    // Pull down Can Standby pin
+    canSTB = 0;
     //Initialization
     #if defined(DEBUG)
         initializeSerial();
