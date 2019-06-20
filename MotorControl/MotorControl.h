@@ -62,8 +62,8 @@ private:
     volatile int prevPulses_;
     volatile float pwmDuty_ ;
     volatile float processValue_;                           // [encoder pulses (per second)]
-    volatile float direction_;                              // Motor direction vaule
-
+    volatile float direction_;                              // Motor direction value
+    int rp_;                                                 // Precision for triggering point reached flag
 
     bool pidType_;                                          // PID control type [0 = position, 1 = velocity]
 

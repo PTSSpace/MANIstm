@@ -21,11 +21,19 @@ MotorControl::MotorControl(PinName motPin, PinName dirPin, PinName qeiPinA, PinN
     processValue_ = 0.0;
     direction_ = 0.0;
 
-
-
     pidType_ = pidType;
     initialize_motor();
     initialize_pid_controllers();
+
+    // Adjust precision flag for point reached feedback
+    if (pidType_){
+        // Velocity control
+        rp_ = Vel_RP;
+    }
+    else{
+        // Position control
+        rp_ = Pos_RP;
+    }
 
     // PID update timer
     pidTick_.attach(&pid_control, RATE);
@@ -47,7 +55,7 @@ void MotorControl::pid_control_processing(void){
     // Position control
     else processValue_ = float(pulses_);
     // Check if setpoint has been reached
-    if (!point_reached_ && processValue_-set_point_ < 20 && processValue_-set_point_ > -20 ) point_reached_ = 1;
+    if (!point_reached_ && processValue_-set_point_ < rp_ && processValue_-set_point_ > -rp_ ) point_reached_ = 1;
 
     // Compute PID and set motor
     if (mode_) {

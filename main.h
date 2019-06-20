@@ -38,24 +38,25 @@
 //-----------------------------------------/
 
 // Initialise variables
-bool        msg_received_ = 0;          // Message receiver flag
-bool        msg_sent = 1;               // Message sender flag
-bool        publisherMode = 0;          // Publisher status on/off
-bool        ortFeed = 0;                // Orientation feedback to be sent
+bool        msg_received_ = 0;                                      // Message receiver flag
+bool        msg_sent = 1;                                           // Message sender flag
+bool        publisherMode = 0;                                      // Publisher status on/off
+bool        ortFeed = 0;                                            // Orientation reached feedback to be sent
+bool        velFeed = 0;                                            // Velocity reached feedback to be sent
 
-Ticker              pubTick;                   // Odometry publisher ticker
+Ticker              pubTick;                                        // Odometry publisher ticker
 
 CANMessage          rxMsg;
 CANMessage          txMsg;
 
 // CAN interface
-UnlockedCAN                 can(PB_8, PB_9);            // CAN rdx pin name, CAN tdx pin name
+UnlockedCAN                 can(PB_8, PB_9);                        // CAN rdx pin name, CAN tdx pin name
 CANInterface                ci;
 DigitalOut          canSTB(PA_8);
 
 
 // Interrupt event queue
-EventQueue          com_queue;                      // Command queue
+EventQueue          com_queue;                                      // Command queue
 Thread commandThread(osPriorityHigh);
 
 
@@ -112,8 +113,8 @@ volatile bool pid = 0;                                              // PID compu
     void initializeSerial(void);
 #endif
 
-void initialize_can_bus(void);                          // Initialization of can objects and interrupts
-void can_received(void);                         // CAN message interrupt handler
-void can_publisher(void);                        // Ticker interrupt handler to set send flag
-void can_publisher_processing(uint8_t, int*, int);       // Processer for publisher flag
-void can_command_processing(void);                      // Processer thread for message interrupts
+void initialize_can_bus(void);                                      // Initialization of can objects and interrupts
+void can_received(void);                                            // CAN message interrupt handler
+void can_publisher(void);                                           // Ticker interrupt handler to set send flag
+void can_publisher_processing(uint8_t, int*, int, int);             // Processor for publisher flag
+void can_command_processing(void);                                  // Processor thread for message interrupts

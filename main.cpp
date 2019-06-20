@@ -42,34 +42,45 @@ int main(void)
         // CAN Bus
         //-----------------------------------------/
         // Check for received message
-        // Publish orientation odometry message
+        // Publish locomotion task accomplished message
         if (PositionControl.get_reached_flag() && ortFeed){
-            // Get steer encoder data
-            data[0] = PositionControl.QEI::getPulses();                                 // Steer encoder pulses  [0..MaxValue]
+            data[0] = 1;                                 // Steer encoder pulses  [0..MaxValue]
             // Send reached orientation feedback
-            can_publisher_processing(O_ODM, data, 1);
+            can_publisher_processing(LC_FD, data, 1, 0);
             if (msg_sent) ortFeed = 0;                                                  // Clear orientation feedback flag
             #if defined(DEBUG)
                 if(msg_sent) {
                         pc.printf("-------------------------------------\r\n");
-                        pc.printf("CAN orientation sent\r\n");
-                        pc.printf(" Pulses = %d \r\n", data[0]);
+                        pc.printf("CAN orientation reached sent\r\n");
+                }
+                else pc.printf("Transmission error\r\n");
+            #endif
+        }
+        if (VelocityControl.get_reached_flag() && velFeed){
+            data[0] = 1;
+            // Send reached orientation feedback
+            can_publisher_processing(LC_FD, data, 1, 0);
+            if (msg_sent) velFeed = 0;                                                  // Clear orientation feedback flag
+            #if defined(DEBUG)
+                if(msg_sent) {
+                        pc.printf("-------------------------------------\r\n");
+                        pc.printf("CAN velocity reached sent\r\n");
                 }
                 else pc.printf("Transmission error\r\n");
             #endif
         }
 
-        // Publish velocity odometry message
+        // Publish locomotion odometry message
 		if (!msg_sent){
             // Get drive encoder data
             data[0] = VelocityControl.QEI::getPulses();                                 // Drive encoder pulses  [0..pulsesPerRevl]
             data[1] = VelocityControl.QEI::getRevolutions();                            // Drive encoder revolutions  [0..MaxValue]
             // Send message
-			can_publisher_processing(V_ODM, data, 2);
+			can_publisher_processing(OM_FD, data, 2, 1);
             #if defined(DEBUG)
                 if(msg_sent) {
                     pc.printf("-------------------------------------\r\n");
-                    pc.printf("CAN velocity sent\r\n");
+                    pc.printf("CAN odometry sent\r\n");
                     pc.printf("Pulses = %d \r\n", data[0]);
                     pc.printf("Revolutions = %d \r\n", data[1]);
                 }
@@ -156,23 +167,19 @@ void can_command_processing(void)
     if (rxMsg.id == S_CMD){
         // Extract data from the received CAN message
         // in the same order as it was added on the transmitter side
-        driveMode = ci.byte_to_int(rxMsg.data, 0, 4);               // Read first four bytes (driveMode  [0, 1])
+        driveMode = ci.byte_to_int(rxMsg.data, 0, 1);               // Read first four bytes (driveMode  [0, 1])
         VelocityControl.set_mode(driveMode);
-        steerMode = ci.byte_to_int(rxMsg.data, 4, 4);               // Read second four bytes (steerMode  [0, 1])
+        steerMode = ci.byte_to_int(rxMsg.data, 1, 1);               // Read second four bytes (steerMode  [0, 1])
         PositionControl.set_mode(steerMode);
+        // Extract data from the received CAN message
+        // in the same order as it was added on the transmitter side
+        publisherMode = ci.byte_to_int(rxMsg.data, 2, 1);           // Read first four bytes (publisher  [0, 1])
         #if defined(DEBUG)
             pc.printf("Drive mode set to %d\r\n", driveMode);
             pc.printf("Steer mode set to %d\r\n", steerMode);
+            pc.printf("Set publisher mode %d\r\n", publisherMode);
         #endif
-    }
-    else if (rxMsg.id == I_CMD) {
-        // Extract data from the received CAN message
-        // in the same order as it was added on the transmitter side
-        publisherMode = ci.byte_to_int(rxMsg.data, 0, 4);           // Read first four bytes (publisher  [0, 1])
-        #if defined(DEBUG)
-                pc.printf("Set publisher mode %d\r\n", publisherMode);
-        #endif
-        zeroEncoder = ci.byte_to_int(rxMsg.data, 4, 4);             // Read second four bytes (zeroEncoders  [0, 1])
+        zeroEncoder = ci.byte_to_int(rxMsg.data, 3, 1);             // Read second four bytes (zeroEncoders  [0, 1])
     }
     else if (rxMsg.id == O_CMD) {
         // Extract data from the received CAN message
@@ -182,7 +189,7 @@ void can_command_processing(void)
         set_orientation = ci.msg_to_enc(orientation, 1);            // orientation [0..EncOrMax]
         // Apply orientation set point
         PositionControl.update_set_point(set_orientation);
-        ortFeed = 1;                                                //SEt orientation feedback flag
+        ortFeed = 1;                                                //Set orientation feedback flag
         #if defined(DEBUG)
             pc.printf("Set orientation %d\r\n", orientation);
         #endif
@@ -195,16 +202,26 @@ void can_command_processing(void)
         set_velocity = ci.msg_to_enc(velocity, 0);                  // velocity [0..EncOrMax]
         // Apply velocity set point
         VelocityControl.update_set_point(set_velocity);
+        velFeed = 1;                                                //Set velocity feedback flag
         #if defined(DEBUG)
             pc.printf("Set velocity %d\r\n", velocity);
         #endif
     }
 }
 
-void can_publisher_processing (uint8_t ID, int value[], int num_values){
+void can_publisher_processing (uint8_t ID, int value[], int num_values, int type){
     txMsg.id = ID;                                                      // Set ID (11 bit)
-    txMsg.len = num_values * 4;                                         // Length of transfered data [byte]
-    ci.int_to_byte(txMsg.data, value, num_values);
+    if (type == 0){
+        txMsg.len = num_values;
+        for (int i = 0 ; i<num_values; i++){
+            if(value[i] != 0)
+                txMsg.data[i] = 1;
+        }
+    }
+    else {
+        txMsg.len = num_values * 4;                                         // Length of transfered data [byte]
+        ci.int_to_byte(txMsg.data, value, num_values);
+    }
     // Write message to CAN bus
     msg_sent = can.write(txMsg);
 }
