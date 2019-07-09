@@ -10,11 +10,11 @@
  * Defines
  */
 
-#define DEBUG					1				    // Debug output
-#define FRONT_LEFT              1                   // Wheel index ['front_left', 'rear_left', 'rear_right', 'front_right']
+#define DEBUG					1				                                // Debug output
+#define FRONT_LEFT              1                                               // Wheel index ['front_left', 'rear_left', 'rear_right', 'front_right']
 
 // Protocol parameters
-#define MaxValue                2147483647          // Maximal signed value for 4 bytes
+#define MaxValue                2147483647                                      // Maximal signed value for 4 bytes
 
 //****************************************************************************/
 // Defines
@@ -28,19 +28,19 @@
 #define PULSES_PER_REV          8384
 
 // Set motor parameters
-#define MAX_VEL             3                                           // Maximal wheel velocity [rps]
-const float MaxVelEnc = MAX_VEL * PULSES_PER_REV;                       // Maximal wheel velocity [encoder pulses per second]
-#define MaxOrientation          3.14159265358979323846                  // Maximal wheel orientation [rad]
-const float MaxOrEnc = float(PULSES_PER_REV)/2.0;                       // Maximal wheel orientation [encoder pulses]
+#define MAX_VEL                 3                                               // Maximal wheel velocity [rad/s]
+#define MaxOrientation          3.14159265358979323846                          // Maximal wheel orientation [rad]
+const float MaxVelEnc = MAX_VEL * PULSES_PER_REV/(2*float(MaxOrientation));     // Maximal wheel velocity [encoder pulses per second]
+const float MaxOrEnc = float(PULSES_PER_REV)/2.0;                               // Maximal wheel orientation [encoder pulses]
 
 // CAN communication
-#define PUB_RATE                5.0     		    // Rate to publish odometry data [s]
+#define PUB_RATE                5.0                                             // Rate to publish odometry data [s]
 
 
 
 
 
-#define FREQUENCY				500000				// CAN bus bit rate
+#define FREQUENCY				500000                                         // CAN bus bit rate
 
 
 

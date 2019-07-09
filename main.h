@@ -50,14 +50,14 @@ CANMessage          rxMsg;
 CANMessage          txMsg;
 
 // CAN interface
-UnlockedCAN                 can(PB_8, PB_9);                        // CAN rdx pin name, CAN tdx pin name
-CANInterface                ci;
+UnlockedCAN         can(PA_11, PA_12);                              // CAN rdx pin name, CAN tdx pin name
+CANInterface        ci;
 DigitalOut          canSTB(PA_8);
 
 
 // Interrupt event queue
 EventQueue          com_queue;                                      // Command queue
-Thread commandThread(osPriorityHigh);
+Thread              commandThread(osPriorityHigh);
 
 
 // Interrupt event queue
@@ -74,7 +74,7 @@ bool zeroEncoder = 0;
  Ticker MotorControl::pidTick_;
 
 // Velocity PID control
-MotorControl VelocityControl(PA_6, PA_7, PA_11, PA_12, Vel_Kc, Vel_Ti, Vel_Td, RATE, 1);
+MotorControl VelocityControl(PA_6, PA_7, PA_15, PB_3, Vel_Kc, Vel_Ti, Vel_Td, RATE, 1);
 
 // Position control
 MotorControl PositionControl(PB_0, PB_1, PA_9, PA_10, Pos_Kc, Pos_Ti, Pos_Td, RATE, 0);
