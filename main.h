@@ -1,6 +1,6 @@
 #include "stm32f103c8t6.h"
 #include "mbed.h"
-#include "MotorControl.h"
+#include "CurrentSensor.h"
 #include "CANInterface.h"
 
 //****************************************************************************/
@@ -14,17 +14,8 @@
 // UART Serial output
 #if defined(DEBUG)
     // Wheel index
-    #if defined(FRONT_LEFT)
-        const char wheelIndex[12] = "front_left";
-    #endif
-    #if defined(REAR_LEFT)
-        const char wheelIndex[12] = "rear_left";
-    #endif
-    #if defined(REAR_RIGHT)
-        const char wheelIndex[12] = "rear_right";
-    #endif
-    #if defined(FRONT_RIGHT)
-        const char wheelIndex[12] = "front_right";
+    #if defined(EPS)
+        const char nodeIndex[4] = "eps";
     #endif
     // Declare LED pin
     #define LED_PIN     LED1
@@ -41,43 +32,43 @@
 bool        msg_received_ = 0;                                      // Message receiver flag
 bool        msg_sent = 1;                                           // Message sender flag
 bool        publisherMode = 0;                                      // Publisher status on/off
-bool        ortFeed = 0;                                            // Orientation reached feedback to be sent
-bool        velFeed = 0;                                            // Velocity reached feedback to be sent
+bool        pwrFeed = 0;                                            // Motor power set feedback to be sent
 
-Ticker              pubTick;                                        // Odometry publisher ticker
+
+Ticker              pubTick;                                        // Current sensor publisher ticker
 
 CANMessage          rxMsg;
 CANMessage          txMsg;
 
 // CAN interface
-UnlockedCAN         can(PA_11, PA_12);                              // CAN rdx pin name, CAN tdx pin name
-CANInterface        ci;
+UnlockedCAN                 can(PB_8, PB_9);                        // CAN rdx pin name, CAN tdx pin name
+CANInterface                ci;
 DigitalOut          canSTB(PA_8);
 
 
 // Interrupt event queue
 EventQueue          com_queue;                                      // Command queue
-Thread              commandThread(osPriorityHigh);
+Thread commandThread(osPriorityHigh);
 
-
-// Interrupt event queue
-//EventQueue          com_queue_;                                   // Command queue
-//Thread commandThread_(osPriorityHigh);
 
 //-----------------------------------------/
-// PID Position/Velocity Control
+// Electrical Power Supply Monitoring
 //-----------------------------------------/
 
-bool zeroEncoder = 0;
+int error[5] = {0, 0, 0, 0, 0};
+int crit[5] = {0, 0, 0, 0, 0};
+float current[5] = {0, 0, 0, 0, 0};
 
- bool MotorControl::pid_ = 0;
- Ticker MotorControl::pidTick_;
+// Current sensors
+CurrentSensor batterySen (PC_15, PA_0, float(ACS_25A), float(ACS_PWR));         // Full current drawn from battery
+CurrentSensor flMotorSen (PA_1, PA_2, float(ACS_25A), float(ACS_PWR));          // Current drawn by front left motor
+CurrentSensor rlMotorSen (PA_3, PA_4, float(ACS_25A), float(ACS_PWR));          // Current drawn by rear left motor
+CurrentSensor rrMotorSen (PA_5, PA_6, float(ACS_25A), float(ACS_PWR));          // Current drawn by rear right motor
+CurrentSensor frMotorSen (PA_7, PB_0, float(ACS_25A), float(ACS_PWR));          // Current drawn by front right motor
 
-// Velocity PID control
-MotorControl VelocityControl(PA_6, PA_7, PA_15, PB_3, Vel_Kc, Vel_Ti, Vel_Td, RATE, 1);
+// Relays
+DigitalOut MotorPower(PC_14) = 0;                                               // Motor power switch (initialised as off)
 
-// Position control
-MotorControl PositionControl(PB_0, PB_1, PA_9, PA_10, Pos_Kc, Pos_Ti, Pos_Td, RATE, 0);
 //****************************************************************************/
 // Declaration - Working variables
 //****************************************************************************/
