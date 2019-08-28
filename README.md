@@ -94,7 +94,7 @@ The execution order is based the rovers drive behaviour. The start sequence and 
  - velocity is set
  - once velocity is reached feedback flag is sent to \ac{obc}
 
-Alternatively in Mbed OS 5 EventQueues can be used to the same effect.
+Alternatively in Mbed OS 5 EventQueues can be used to the same effect. This [post](https://os.mbed.com/blog/entry/Simplify-your-code-with-mbed-events/) in the Mbed forum shows how best to defer from the interrupt handler functions in Mbed OS 5.
 
 ## CAN Bus
 The CAN interface is set to **can0** but may be set to **can1** if desired.
