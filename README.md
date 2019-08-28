@@ -1,8 +1,12 @@
 # MANIstm
 
 The repository for the code that runs on MANIs STM32 microcontrollers.
-The 'master' branch is the most recent working version of the drive controllers. It includes on Mbed OS 2 (Mbed-dev) paired with the Mbed RTOS.
+
+The 'master' branch is the most recent working version of the drive controllers. It is the only branch running on Mbed OS 2 (Mbed-dev) paired with the Mbed RTOS.
+Since the size of Mbed OS 2 is considerably smaller than Mbed OS 5, it is included in the repository.
+
 For alternative versions please switch the branch.
+
 
 ## Overview
 
