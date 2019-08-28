@@ -159,10 +159,14 @@ QEI::QEI(PinName channelA,
         channelB_.rise(this, &QEI::encode);
         channelB_.fall(this, &QEI::encode);
     }
+
     //Index is optional.
     if (index !=  NC) {
         index_.rise(this, &QEI::index);
     }
+
+    //Enable revolution count if no index channel is passed
+    revCount_ = NC == 0 ? true : false;
 
 }
 
@@ -279,6 +283,17 @@ void QEI::encode(void) {
     }
 
     prevState_ = currState_;
+
+    //Increment revolution counter if pulses exceed a rotation
+    if (revCount_){
+        if (pulses_ > pulsesPerRev_){
+            revolutions_++;
+        }
+        if (pulses_ < pulsesPerRev_){
+            revolutions_--;
+        }
+    }
+
 
 }
 

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Project emblocks_ix="1.0.0" name="mbed-rtos">
+    <Target name="mbed-rtos" target="NUCLEO_F103RB">
+        <Source name="mbed.org" version="1.0.0">
+            <Toolchain name="GCC_ARM"/>
+            <CC>
+                <Switch name="-c"/>
+                <Switch name="-Wall"/>
+                <Switch name="-Wextra"/>
+                <Switch name="-Wno-unused-parameter"/>
+                <Switch name="-Wno-missing-field-initializers"/>
+                <Switch name="-fmessage-length=0"/>
+                <Switch name="-fno-exceptions"/>
+                <Switch name="-ffunction-sections"/>
+                <Switch name="-fdata-sections"/>
+                <Switch name="-funsigned-char"/>
+                <Switch name="-MMD"/>
+                <Switch name="-fno-delete-null-pointer-checks"/>
+                <Switch name="-fomit-frame-pointer"/>
+                <Switch name="-Os"/>
+                <Switch name="-g1"/>
+                <Switch name="-DMBED_TRAP_ERRORS_ENABLED=1"/>
+                <Switch name="-mcpu=cortex-m3"/>
+                <Switch name="-mthumb"/>
+                <Switch name="-DMBED_ROM_START=0x8000000"/>
+                <Switch name="-DMBED_ROM_SIZE=0x20000"/>
+                <Switch name="-DMBED_RAM_START=0x20000000"/>
+                <Switch name="-DMBED_RAM_SIZE=0x5000"/>
+                <Switch name="-std=gnu11"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                
+            </CC>
+            <CPPC>
+                <Switch name="-c"/>
+                <Switch name="-Wall"/>
+                <Switch name="-Wextra"/>
+                <Switch name="-Wno-unused-parameter"/>
+                <Switch name="-Wno-missing-field-initializers"/>
+                <Switch name="-fmessage-length=0"/>
+                <Switch name="-fno-exceptions"/>
+                <Switch name="-ffunction-sections"/>
+                <Switch name="-fdata-sections"/>
+                <Switch name="-funsigned-char"/>
+                <Switch name="-MMD"/>
+                <Switch name="-fno-delete-null-pointer-checks"/>
+                <Switch name="-fomit-frame-pointer"/>
+                <Switch name="-Os"/>
+                <Switch name="-g1"/>
+                <Switch name="-DMBED_TRAP_ERRORS_ENABLED=1"/>
+                <Switch name="-mcpu=cortex-m3"/>
+                <Switch name="-mthumb"/>
+                <Switch name="-DMBED_ROM_START=0x8000000"/>
+                <Switch name="-DMBED_ROM_SIZE=0x20000"/>
+                <Switch name="-DMBED_RAM_START=0x20000000"/>
+                <Switch name="-DMBED_RAM_SIZE=0x5000"/>
+                <Switch name="-std=gnu++14"/>
+                <Switch name="-fno-rtti"/>
+                <Switch name="-Wvla"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                
+            </CPPC>
+            <Symbols>
+                <Symbol name="MBED_BUILD_TIMESTAMP=1562676866.93"/>
+                <Symbol name="__MBED__=1"/>
+                <Symbol name="DEVICE_I2CSLAVE=1"/>
+                <Symbol name="TARGET_LIKE_MBED"/>
+                <Symbol name="DEVICE_PORTOUT=1"/>
+                <Symbol name="DEVICE_PORTINOUT=1"/>
+                <Symbol name="__MBED_CMSIS_RTOS_CM"/>
+                <Symbol name="__CMSIS_RTOS"/>
+                <Symbol name="TARGET_STM32F1"/>
+                <Symbol name="DEVICE_RTC=1"/>
+                <Symbol name="DEVICE_SERIAL_ASYNCH=1"/>
+                <Symbol name="TARGET_NAME=NUCLEO_F103RB"/>
+                <Symbol name="DEVICE_CAN=1"/>
+                <Symbol name="TOOLCHAIN_GCC"/>
+                <Symbol name="DEVICE_I2C_ASYNCH=1"/>
+                <Symbol name="TARGET_LIKE_CORTEX_M3"/>
+                <Symbol name="TARGET_CORTEX_M"/>
+                <Symbol name="ARM_MATH_CM3"/>
+                <Symbol name="COMPONENT_PSA_SRV_EMUL=1"/>
+                <Symbol name="COMPONENT_PSA_SRV_IMPL=1"/>
+                <Symbol name="TARGET_M3"/>
+                <Symbol name="DEVICE_SERIAL=1"/>
+                <Symbol name="DEVICE_SPI_ASYNCH=1"/>
+                <Symbol name="DEVICE_INTERRUPTIN=1"/>
+                <Symbol name="TARGET_CORTEX"/>
+                <Symbol name="DEVICE_I2C=1"/>
+                <Symbol name="TRANSACTION_QUEUE_SIZE_SPI=2"/>
+                <Symbol name="__CORTEX_M3"/>
+                <Symbol name="DEVICE_STDIO_MESSAGES=1"/>
+                <Symbol name="TARGET_FF_MORPHO"/>
+                <Symbol name="TARGET_FAMILY_STM32"/>
+                <Symbol name="TARGET_FF_ARDUINO"/>
+                <Symbol name="TARGET_RELEASE"/>
+                <Symbol name="TARGET_STM"/>
+                <Symbol name="TOOLCHAIN_GCC_ARM"/>
+                <Symbol name="DEVICE_SERIAL_FC=1"/>
+                <Symbol name="DEVICE_USTICKER=1"/>
+                <Symbol name="DEVICE_PORTIN=1"/>
+                <Symbol name="DEVICE_SLEEP=1"/>
+                <Symbol name="TARGET_NUCLEO_F103RB"/>
+                <Symbol name="DEVICE_SPI=1"/>
+                <Symbol name="COMPONENT_NSPE=1"/>
+                <Symbol name="DEVICE_SPISLAVE=1"/>
+                <Symbol name="DEVICE_ANALOGIN=1"/>
+                <Symbol name="DEVICE_PWMOUT=1"/>
+                <Symbol name="DEVICE_FLASH=1"/>
+                <Symbol name="TARGET_STM32F103RB"/>
+                
+            </Symbols>
+            <LD>
+                <Switch name="-Wl,--gc-sections"/>
+                <Switch name="-Wl,--wrap,main"/>
+                <Switch name="-Wl,--wrap,_malloc_r"/>
+                <Switch name="-Wl,--wrap,_free_r"/>
+                <Switch name="-Wl,--wrap,_realloc_r"/>
+                <Switch name="-Wl,--wrap,_memalign_r"/>
+                <Switch name="-Wl,--wrap,_calloc_r"/>
+                <Switch name="-Wl,--wrap,exit"/>
+                <Switch name="-Wl,--wrap,atexit"/>
+                <Switch name="-Wl,-n"/>
+                <Switch name="-mcpu=cortex-m3"/>
+                <Switch name="-mthumb"/>
+                <Switch name="-DMBED_ROM_START=0x8000000"/>
+                <Switch name="-DMBED_ROM_SIZE=0x20000"/>
+                <Switch name="-DMBED_RAM_START=0x20000000"/>
+                <Switch name="-DMBED_RAM_SIZE=0x5000"/>
+                <Switch name="-DMBED_BOOT_STACK_SIZE=4096"/>
+                
+            </LD>
+            <Addobjects>
+                
+            </Addobjects>
+            <Syslibs>
+                <Library name="stdc++"/>
+                <Library name="supc++"/>
+                <Library name="m"/>
+                <Library name="c"/>
+                <Library name="gcc"/>
+                <Library name="nosys"/>
+                
+            </Syslibs>
+            <Scriptfile path=""/>
+        </Source>
+        <Assembler>
+        </Assembler>
+        <Compiler>
+            <Includepaths>
+                <Includepath path=""/>
+                <Includepath path="/usr/src/mbed-sdk"/>
+                <Includepath path="rtos"/>
+                <Includepath path="rtx/TARGET_CORTEX_M"/>
+                <Includepath path="targets/TARGET_STM"/>
+                
+            </Includepaths>
+            <Symbols>
+            </Symbols>
+        </Compiler>
+        <Linker>
+            <Libraries>
+                
+            </Libraries>
+            <Librarypaths>
+                
+            </Librarypaths>
+        </Linker>
+        <Files>
+            <File  name="mbed_config.h" type="h"/>
+            <File  name="rtos/Mail.h" type="h"/>
+            <File  name="rtos/MemoryPool.h" type="h"/>
+            <File  name="rtos/Mutex.h" type="h"/>
+            <File  name="rtos/Queue.h" type="h"/>
+            <File  name="rtos/RtosTimer.h" type="h"/>
+            <File  name="rtos/Semaphore.h" type="h"/>
+            <File  name="rtos/Thread.h" type="h"/>
+            <File  name="rtos/rtos.h" type="h"/>
+            <File  name="rtos/rtos_idle.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/RTX_CM_lib.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/RTX_Config.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/cmsis_os.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Event.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_HAL_CM.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_List.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Mailbox.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_MemBox.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Memory.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Mutex.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_OsEventObserver.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Robin.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Semaphore.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_System.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Task.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Time.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Timer.h" type="h"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_TypeDef.h" type="h"/>
+            <File  name="targets/TARGET_STM/mbed_rtx4.h" type="h"/>
+            <File  name="rtos/Mutex.cpp" type="cpp"/>
+            <File  name="rtos/RtosTimer.cpp" type="cpp"/>
+            <File  name="rtos/Semaphore.cpp" type="cpp"/>
+            <File  name="rtos/Thread.cpp" type="cpp"/>
+            <File  name="rtos/rtos_idle.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/HAL_CM.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/RTX_Conf_CM.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_CMSIS.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Event.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_List.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Mailbox.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_MemBox.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Memory.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Mutex.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_OsEventObserver.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Robin.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Semaphore.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_System.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Task.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Time.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/rt_Timer.c" type="c"/>
+            <File  name="rtx/TARGET_CORTEX_M/TARGET_M3/TOOLCHAIN_GCC/HAL_CM3.S" type="a"/>
+            <File  name="rtx/TARGET_CORTEX_M/TARGET_M3/TOOLCHAIN_GCC/SVC_Table.S" type="a"/>
+            
+        </Files>
+    </Target>
+</Project>

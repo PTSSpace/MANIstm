@@ -239,6 +239,8 @@ private:
     volatile int pulses_;
     volatile int revolutions_;
 
+    bool revCount_;
+
 };
 
 #endif /* QEI_H */

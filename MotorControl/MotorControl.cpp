@@ -7,16 +7,18 @@
  * Functions
  */
 MotorControl::MotorControl(PinName motPin, PinName dirPin, PinName qeiPinA, PinName qeiPinB,
-                            float Kc, float tauI, float tauD, float interval, bool pidType) :
-                            QEI(qeiPinA, qeiPinB, NC, PULSES_PER_REV, QEI::X4_ENCODING),          // Important 5V tollerant interrupt pins
-                            PwmOut(motPin), DigitalOut(dirPin),
+                            float Kc, float tauI, float tauD, float interval, bool pidType,
+                            int PULSES_PER_REV) : QEI(qeiPinA, qeiPinB, NC, PULSES_PER_REV,          // Important 5V tollerant interrupt pins
+                            QEI::X4_ENCODING), PwmOut(motPin), DigitalOut(dirPin),
                             PID(Kc, tauI, tauD, RATE) {
     // Initialize working variables
     mode_ = 0;
     point_reached_ = 1;
     set_point_ = 0;
-    pulses_     = 0;
+    pulses_ = 0;
+    revolutions_ = 0;
     prevPulses_ = 0;
+    prevRevolutions_ = 0;
     pwmDuty_  = 0.0;
     processValue_ = 0.0;
     direction_ = 0.0;
@@ -34,23 +36,17 @@ MotorControl::MotorControl(PinName motPin, PinName dirPin, PinName qeiPinA, PinN
         // Position control
         rp_ = Pos_RP;
     }
-
-    // PID update timer
-    pidTick_.attach(&pid_control, RATE);
-}
-void MotorControl::pid_control(void){
-    // Set pid control flag
-    pid_ = 1;
-
 }
 
 void MotorControl::pid_control_processing(void){
-    // Get pulses and set process variable
-    pulses_ =  QEI::getPulses();
+    // Get pulses and revolutions and set process variable
+    pulses_ = QEI::getPulses();
+    revolutions_ = QEI::getRevolutions();
     if (pidType_){
         // Velocity control
-        processValue_ = float(pulses_ - prevPulses_) / RATE;
+        processValue_ = (float((revolutions_ - prevRevolutions_) * PULSES_PER_REV_) + float(pulses_ - prevPulses_)) / RATE;
         prevPulses_ = pulses_;                              // Set previous pulses
+        prevRevolutions_ = revolutions_;                    // Set previous revolutions
     }
     // Position control
     else processValue_ = float(pulses_);
@@ -74,7 +70,6 @@ void MotorControl::pid_control_processing(void){
         DigitalOut::write(direction_);
         PwmOut::write(pwmDuty_);
     }
-    pid_ = 0;
 }
 
 void MotorControl::zero_encoder(void){
@@ -82,7 +77,7 @@ void MotorControl::zero_encoder(void){
     QEI::reset();
     bool stop = 0;
     int enc_val = QEI::getPulses();
-    int prev_enc = enc_val + PULSES_PER_REV;
+    int prev_enc = enc_val + PULSES_PER_REV_;
     // Set motor direction opposite on both sides
     #if defined(FRONT_LEFT) || defined(REAR_LEFT)
     // Left motor controller
@@ -159,10 +154,6 @@ void MotorControl::initialize_pid_controllers(void){
         PID::setBias(0.0);
         PID::setMode(AUTO_MODE);
     }
-}
-
-bool MotorControl::get_pid_flag(void){
-    return pid_;
 }
 
 bool MotorControl::get_reached_flag(void){

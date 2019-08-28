@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Project emblocks_ix="1.0.0" name="mbed-dev">
+    <Target name="mbed-dev" target="NUCLEO_F103RB">
+        <Source name="mbed.org" version="1.0.0">
+            <Toolchain name="GCC_ARM"/>
+            <CC>
+                <Switch name="-c"/>
+                <Switch name="-Wall"/>
+                <Switch name="-Wextra"/>
+                <Switch name="-Wno-unused-parameter"/>
+                <Switch name="-Wno-missing-field-initializers"/>
+                <Switch name="-fmessage-length=0"/>
+                <Switch name="-fno-exceptions"/>
+                <Switch name="-ffunction-sections"/>
+                <Switch name="-fdata-sections"/>
+                <Switch name="-funsigned-char"/>
+                <Switch name="-MMD"/>
+                <Switch name="-fno-delete-null-pointer-checks"/>
+                <Switch name="-fomit-frame-pointer"/>
+                <Switch name="-Os"/>
+                <Switch name="-g1"/>
+                <Switch name="-DMBED_TRAP_ERRORS_ENABLED=1"/>
+                <Switch name="-mcpu=cortex-m3"/>
+                <Switch name="-mthumb"/>
+                <Switch name="-std=gnu11"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                
+            </CC>
+            <CPPC>
+                <Switch name="-c"/>
+                <Switch name="-Wall"/>
+                <Switch name="-Wextra"/>
+                <Switch name="-Wno-unused-parameter"/>
+                <Switch name="-Wno-missing-field-initializers"/>
+                <Switch name="-fmessage-length=0"/>
+                <Switch name="-fno-exceptions"/>
+                <Switch name="-ffunction-sections"/>
+                <Switch name="-fdata-sections"/>
+                <Switch name="-funsigned-char"/>
+                <Switch name="-MMD"/>
+                <Switch name="-fno-delete-null-pointer-checks"/>
+                <Switch name="-fomit-frame-pointer"/>
+                <Switch name="-Os"/>
+                <Switch name="-g1"/>
+                <Switch name="-DMBED_TRAP_ERRORS_ENABLED=1"/>
+                <Switch name="-mcpu=cortex-m3"/>
+                <Switch name="-mthumb"/>
+                <Switch name="-std=gnu++14"/>
+                <Switch name="-fno-rtti"/>
+                <Switch name="-Wvla"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                <Switch name="-include"/>
+                <Switch name="mbed_config.h"/>
+                
+            </CPPC>
+            <Symbols>
+                <Symbol name="__MBED__=1"/>
+                <Symbol name="DEVICE_I2CSLAVE=1"/>
+                <Symbol name="TARGET_LIKE_MBED"/>
+                <Symbol name="DEVICE_PORTOUT=1"/>
+                <Symbol name="DEVICE_PORTINOUT=1"/>
+                <Symbol name="__MBED_CMSIS_RTOS_CM"/>
+                <Symbol name="__CMSIS_RTOS"/>
+                <Symbol name="TARGET_STM32F1"/>
+                <Symbol name="DEVICE_RTC=1"/>
+                <Symbol name="DEVICE_SERIAL_ASYNCH=1"/>
+                <Symbol name="TARGET_NAME=NUCLEO_F103RB"/>
+                <Symbol name="DEVICE_CAN=1"/>
+                <Symbol name="TOOLCHAIN_GCC"/>
+                <Symbol name="DEVICE_I2C_ASYNCH=1"/>
+                <Symbol name="TARGET_LIKE_CORTEX_M3"/>
+                <Symbol name="TARGET_CORTEX_M"/>
+                <Symbol name="ARM_MATH_CM3"/>
+                <Symbol name="TARGET_M3"/>
+                <Symbol name="DEVICE_SERIAL=1"/>
+                <Symbol name="DEVICE_SPI_ASYNCH=1"/>
+                <Symbol name="DEVICE_INTERRUPTIN=1"/>
+                <Symbol name="TARGET_CORTEX"/>
+                <Symbol name="DEVICE_I2C=1"/>
+                <Symbol name="TRANSACTION_QUEUE_SIZE_SPI=2"/>
+                <Symbol name="__CORTEX_M3"/>
+                <Symbol name="DEVICE_STDIO_MESSAGES=1"/>
+                <Symbol name="TARGET_FF_MORPHO"/>
+                <Symbol name="TARGET_FAMILY_STM32"/>
+                <Symbol name="TARGET_FF_ARDUINO"/>
+                <Symbol name="TARGET_RELEASE"/>
+                <Symbol name="MBED_BUILD_TIMESTAMP=1562674484.22"/>
+                <Symbol name="TARGET_STM"/>
+                <Symbol name="TOOLCHAIN_GCC_ARM"/>
+                <Symbol name="DEVICE_SERIAL_FC=1"/>
+                <Symbol name="DEVICE_USTICKER=1"/>
+                <Symbol name="DEVICE_PORTIN=1"/>
+                <Symbol name="DEVICE_SLEEP=1"/>
+                <Symbol name="TARGET_NUCLEO_F103RB"/>
+                <Symbol name="DEVICE_SPI=1"/>
+                <Symbol name="DEVICE_SPISLAVE=1"/>
+                <Symbol name="DEVICE_ANALOGIN=1"/>
+                <Symbol name="DEVICE_PWMOUT=1"/>
+                <Symbol name="DEVICE_FLASH=1"/>
+                <Symbol name="TARGET_STM32F103RB"/>
+                
+            </Symbols>
+            <LD>
+                <Switch name="-Wl,--gc-sections"/>
+                <Switch name="-Wl,--wrap,main"/>
+                <Switch name="-Wl,--wrap,_malloc_r"/>
+                <Switch name="-Wl,--wrap,_free_r"/>
+                <Switch name="-Wl,--wrap,_realloc_r"/>
+                <Switch name="-Wl,--wrap,_memalign_r"/>
+                <Switch name="-Wl,--wrap,_calloc_r"/>
+                <Switch name="-Wl,--wrap,exit"/>
+                <Switch name="-Wl,--wrap,atexit"/>
+                <Switch name="-Wl,-n"/>
+                <Switch name="-mcpu=cortex-m3"/>
+                <Switch name="-mthumb"/>
+                
+            </LD>
+            <Addobjects>
+                
+            </Addobjects>
+            <Syslibs>
+                <Library name="stdc++"/>
+                <Library name="supc++"/>
+                <Library name="m"/>
+                <Library name="c"/>
+                <Library name="gcc"/>
+                <Library name="nosys"/>
+                
+            </Syslibs>
+            <Scriptfile path="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/TOOLCHAIN_GCC_ARM/STM32F103XB.ld"/>
+        </Source>
+        <Assembler>
+        </Assembler>
+        <Compiler>
+            <Includepaths>
+                <Includepath path=""/>
+                <Includepath path="/usr/src/mbed-sdk"/>
+                <Includepath path="cmsis"/>
+                <Includepath path="cmsis/TARGET_CORTEX_M"/>
+                <Includepath path="drivers"/>
+                <Includepath path="hal"/>
+                <Includepath path="hal/storage_abstraction"/>
+                <Includepath path="platform"/>
+                <Includepath path="targets/TARGET_STM"/>
+                <Includepath path="targets/TARGET_STM/TARGET_STM32F1"/>
+                <Includepath path="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB"/>
+                <Includepath path="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device"/>
+                <Includepath path="targets/TARGET_STM/TARGET_STM32F1/device"/>
+                
+            </Includepaths>
+            <Symbols>
+            </Symbols>
+        </Compiler>
+        <Linker>
+            <Libraries>
+                
+            </Libraries>
+            <Librarypaths>
+                
+            </Librarypaths>
+        </Linker>
+        <Files>
+            <File  name="cmsis/RTE_Components.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/arm_math.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/cmsis_armcc.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/cmsis_armclang.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/cmsis_compiler.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/cmsis_gcc.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/cmsis_iccarm.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/cmsis_version.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_armv8mbl.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_armv8mml.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cm0.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cm0plus.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cm23.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cm3.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cm33.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cm4.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cm7.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_cmSecureAccess.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_sc000.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/core_sc300.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/mpu_armv7.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/mpu_armv8.h" type="h"/>
+            <File  name="cmsis/TARGET_CORTEX_M/tz_context.h" type="h"/>
+            <File  name="cmsis/mbed_cmsis_conf.h" type="h"/>
+            <File  name="drivers/AnalogIn.h" type="h"/>
+            <File  name="drivers/AnalogOut.h" type="h"/>
+            <File  name="drivers/BusIn.h" type="h"/>
+            <File  name="drivers/BusInOut.h" type="h"/>
+            <File  name="drivers/BusOut.h" type="h"/>
+            <File  name="drivers/CAN.h" type="h"/>
+            <File  name="drivers/DigitalIn.h" type="h"/>
+            <File  name="drivers/DigitalInOut.h" type="h"/>
+            <File  name="drivers/DigitalOut.h" type="h"/>
+            <File  name="drivers/Ethernet.h" type="h"/>
+            <File  name="drivers/FlashIAP.h" type="h"/>
+            <File  name="drivers/I2C.h" type="h"/>
+            <File  name="drivers/I2CSlave.h" type="h"/>
+            <File  name="drivers/InterruptIn.h" type="h"/>
+            <File  name="drivers/InterruptManager.h" type="h"/>
+            <File  name="drivers/LowPowerTicker.h" type="h"/>
+            <File  name="drivers/LowPowerTimeout.h" type="h"/>
+            <File  name="drivers/LowPowerTimer.h" type="h"/>
+            <File  name="drivers/MbedCRC.h" type="h"/>
+            <File  name="drivers/PortIn.h" type="h"/>
+            <File  name="drivers/PortInOut.h" type="h"/>
+            <File  name="drivers/PortOut.h" type="h"/>
+            <File  name="drivers/PwmOut.h" type="h"/>
+            <File  name="drivers/RawSerial.h" type="h"/>
+            <File  name="drivers/SPI.h" type="h"/>
+            <File  name="drivers/SPISlave.h" type="h"/>
+            <File  name="drivers/Serial.h" type="h"/>
+            <File  name="drivers/SerialBase.h" type="h"/>
+            <File  name="drivers/SerialWireOutput.h" type="h"/>
+            <File  name="drivers/TableCRC.h" type="h"/>
+            <File  name="drivers/Ticker.h" type="h"/>
+            <File  name="drivers/Timeout.h" type="h"/>
+            <File  name="drivers/Timer.h" type="h"/>
+            <File  name="drivers/TimerEvent.h" type="h"/>
+            <File  name="drivers/UARTSerial.h" type="h"/>
+            <File  name="hal/analogin_api.h" type="h"/>
+            <File  name="hal/analogout_api.h" type="h"/>
+            <File  name="hal/buffer.h" type="h"/>
+            <File  name="hal/can_api.h" type="h"/>
+            <File  name="hal/can_helper.h" type="h"/>
+            <File  name="hal/crc_api.h" type="h"/>
+            <File  name="hal/critical_section_api.h" type="h"/>
+            <File  name="hal/dma_api.h" type="h"/>
+            <File  name="hal/ethernet_api.h" type="h"/>
+            <File  name="hal/flash_api.h" type="h"/>
+            <File  name="hal/gpio_api.h" type="h"/>
+            <File  name="hal/gpio_irq_api.h" type="h"/>
+            <File  name="hal/i2c_api.h" type="h"/>
+            <File  name="hal/itm_api.h" type="h"/>
+            <File  name="hal/lp_ticker_api.h" type="h"/>
+            <File  name="hal/pinmap.h" type="h"/>
+            <File  name="hal/port_api.h" type="h"/>
+            <File  name="hal/pwmout_api.h" type="h"/>
+            <File  name="hal/rtc_api.h" type="h"/>
+            <File  name="hal/serial_api.h" type="h"/>
+            <File  name="hal/sleep_api.h" type="h"/>
+            <File  name="hal/spi_api.h" type="h"/>
+            <File  name="hal/storage_abstraction/Driver_Common.h" type="h"/>
+            <File  name="hal/storage_abstraction/Driver_Storage.h" type="h"/>
+            <File  name="hal/ticker_api.h" type="h"/>
+            <File  name="hal/trng_api.h" type="h"/>
+            <File  name="hal/us_ticker_api.h" type="h"/>
+            <File  name="mbed.h" type="h"/>
+            <File  name="mbed_config.h" type="h"/>
+            <File  name="platform/ATCmdParser.h" type="h"/>
+            <File  name="platform/CThunk.h" type="h"/>
+            <File  name="platform/CallChain.h" type="h"/>
+            <File  name="platform/Callback.h" type="h"/>
+            <File  name="platform/CircularBuffer.h" type="h"/>
+            <File  name="platform/CriticalSectionLock.h" type="h"/>
+            <File  name="platform/DeepSleepLock.h" type="h"/>
+            <File  name="platform/DirHandle.h" type="h"/>
+            <File  name="platform/FileBase.h" type="h"/>
+            <File  name="platform/FileHandle.h" type="h"/>
+            <File  name="platform/FileLike.h" type="h"/>
+            <File  name="platform/FilePath.h" type="h"/>
+            <File  name="platform/FileSystemHandle.h" type="h"/>
+            <File  name="platform/FileSystemLike.h" type="h"/>
+            <File  name="platform/FunctionPointer.h" type="h"/>
+            <File  name="platform/LocalFileSystem.h" type="h"/>
+            <File  name="platform/NonCopyable.h" type="h"/>
+            <File  name="platform/PlatformMutex.h" type="h"/>
+            <File  name="platform/ScopedLock.h" type="h"/>
+            <File  name="platform/SingletonPtr.h" type="h"/>
+            <File  name="platform/Stream.h" type="h"/>
+            <File  name="platform/Transaction.h" type="h"/>
+            <File  name="platform/critical.h" type="h"/>
+            <File  name="platform/mbed_application.h" type="h"/>
+            <File  name="platform/mbed_assert.h" type="h"/>
+            <File  name="platform/mbed_critical.h" type="h"/>
+            <File  name="platform/mbed_debug.h" type="h"/>
+            <File  name="platform/mbed_error.h" type="h"/>
+            <File  name="platform/mbed_error_hist.h" type="h"/>
+            <File  name="platform/mbed_interface.h" type="h"/>
+            <File  name="platform/mbed_mem_trace.h" type="h"/>
+            <File  name="platform/mbed_mktime.h" type="h"/>
+            <File  name="platform/mbed_poll.h" type="h"/>
+            <File  name="platform/mbed_power_mgmt.h" type="h"/>
+            <File  name="platform/mbed_preprocessor.h" type="h"/>
+            <File  name="platform/mbed_retarget.h" type="h"/>
+            <File  name="platform/mbed_rtc_time.h" type="h"/>
+            <File  name="platform/mbed_semihost_api.h" type="h"/>
+            <File  name="platform/mbed_sleep.h" type="h"/>
+            <File  name="platform/mbed_stats.h" type="h"/>
+            <File  name="platform/mbed_toolchain.h" type="h"/>
+            <File  name="platform/mbed_version.h" type="h"/>
+            <File  name="platform/mbed_wait_api.h" type="h"/>
+            <File  name="platform/platform.h" type="h"/>
+            <File  name="platform/rtc_time.h" type="h"/>
+            <File  name="platform/semihost_api.h" type="h"/>
+            <File  name="platform/sleep.h" type="h"/>
+            <File  name="platform/toolchain.h" type="h"/>
+            <File  name="platform/wait_api.h" type="h"/>
+            <File  name="targets/TARGET_STM/PeripheralPins.h" type="h"/>
+            <File  name="targets/TARGET_STM/PinNamesTypes.h" type="h"/>
+            <File  name="targets/TARGET_STM/PortNames.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/PeripheralNames.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/PinNames.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/cmsis.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/cmsis_nvic.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/stm32f103xb.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/stm32f1xx.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/system_stm32f1xx.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/us_ticker_data.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/objects.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/can_device.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/common_objects.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32_assert_template.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32_hal_legacy.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_adc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_adc_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_can.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_can_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_cec.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_conf.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_cortex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_crc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_dac.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_dac_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_def.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_dma.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_dma_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_eth.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_flash.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_flash_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_gpio.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_gpio_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_hcd.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_i2c.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_i2s.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_irda.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_iwdg.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_mmc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_nand.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_nor.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pccard.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pcd.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pcd_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pwr.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rcc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rcc_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rtc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rtc_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_sd.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_smartcard.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_spi.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_sram.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_tim.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_tim_ex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_uart.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_usart.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_wwdg.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_adc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_bus.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_cortex.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_crc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_dac.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_dma.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_exti.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_fsmc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_gpio.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_i2c.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_iwdg.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_pwr.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_rcc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_rtc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_sdmmc.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_spi.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_system.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_tim.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_usart.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_usb.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_utils.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_wwdg.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/gpio_irq_device.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/i2c_device.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/pin_device.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/pwmout_device.h" type="h"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/spi_device.h" type="h"/>
+            <File  name="targets/TARGET_STM/gpio_object.h" type="h"/>
+            <File  name="targets/TARGET_STM/mbed_rtx.h" type="h"/>
+            <File  name="targets/TARGET_STM/nvic_addr.h" type="h"/>
+            <File  name="targets/TARGET_STM/rtc_api_hal.h" type="h"/>
+            <File  name="targets/TARGET_STM/serial_api_hal.h" type="h"/>
+            <File  name="targets/TARGET_STM/stm32_assert.h" type="h"/>
+            <File  name="drivers/AnalogIn.cpp" type="cpp"/>
+            <File  name="drivers/BusIn.cpp" type="cpp"/>
+            <File  name="drivers/BusInOut.cpp" type="cpp"/>
+            <File  name="drivers/BusOut.cpp" type="cpp"/>
+            <File  name="drivers/CAN.cpp" type="cpp"/>
+            <File  name="drivers/Ethernet.cpp" type="cpp"/>
+            <File  name="drivers/FlashIAP.cpp" type="cpp"/>
+            <File  name="drivers/I2C.cpp" type="cpp"/>
+            <File  name="drivers/I2CSlave.cpp" type="cpp"/>
+            <File  name="drivers/InterruptIn.cpp" type="cpp"/>
+            <File  name="drivers/InterruptManager.cpp" type="cpp"/>
+            <File  name="drivers/MbedCRC.cpp" type="cpp"/>
+            <File  name="drivers/RawSerial.cpp" type="cpp"/>
+            <File  name="drivers/SPI.cpp" type="cpp"/>
+            <File  name="drivers/SPISlave.cpp" type="cpp"/>
+            <File  name="drivers/Serial.cpp" type="cpp"/>
+            <File  name="drivers/SerialBase.cpp" type="cpp"/>
+            <File  name="drivers/TableCRC.cpp" type="cpp"/>
+            <File  name="drivers/Ticker.cpp" type="cpp"/>
+            <File  name="drivers/Timeout.cpp" type="cpp"/>
+            <File  name="drivers/Timer.cpp" type="cpp"/>
+            <File  name="drivers/TimerEvent.cpp" type="cpp"/>
+            <File  name="drivers/UARTSerial.cpp" type="cpp"/>
+            <File  name="hal/mbed_lp_ticker_wrapper.cpp" type="cpp"/>
+            <File  name="platform/ATCmdParser.cpp" type="cpp"/>
+            <File  name="platform/CallChain.cpp" type="cpp"/>
+            <File  name="platform/FileBase.cpp" type="cpp"/>
+            <File  name="platform/FileHandle.cpp" type="cpp"/>
+            <File  name="platform/FilePath.cpp" type="cpp"/>
+            <File  name="platform/FileSystemHandle.cpp" type="cpp"/>
+            <File  name="platform/LocalFileSystem.cpp" type="cpp"/>
+            <File  name="platform/Stream.cpp" type="cpp"/>
+            <File  name="platform/mbed_alloc_wrappers.cpp" type="cpp"/>
+            <File  name="platform/mbed_mem_trace.cpp" type="cpp"/>
+            <File  name="platform/mbed_poll.cpp" type="cpp"/>
+            <File  name="platform/mbed_retarget.cpp" type="cpp"/>
+            <File  name="platform/mbed_rtc_time.cpp" type="cpp"/>
+            <File  name="platform/mbed_wait_api_rtos.cpp" type="cpp"/>
+            <File  name="cmsis/TARGET_CORTEX_M/mbed_tz_context.c" type="c"/>
+            <File  name="hal/mbed_critical_section_api.c" type="c"/>
+            <File  name="hal/mbed_flash_api.c" type="c"/>
+            <File  name="hal/mbed_gpio.c" type="c"/>
+            <File  name="hal/mbed_itm_api.c" type="c"/>
+            <File  name="hal/mbed_lp_ticker_api.c" type="c"/>
+            <File  name="hal/mbed_pinmap_common.c" type="c"/>
+            <File  name="hal/mbed_sleep_manager.c" type="c"/>
+            <File  name="hal/mbed_ticker_api.c" type="c"/>
+            <File  name="hal/mbed_us_ticker_api.c" type="c"/>
+            <File  name="platform/mbed_application.c" type="c"/>
+            <File  name="platform/mbed_assert.c" type="c"/>
+            <File  name="platform/mbed_board.c" type="c"/>
+            <File  name="platform/mbed_critical.c" type="c"/>
+            <File  name="platform/mbed_error.c" type="c"/>
+            <File  name="platform/mbed_error_hist.c" type="c"/>
+            <File  name="platform/mbed_interface.c" type="c"/>
+            <File  name="platform/mbed_mktime.c" type="c"/>
+            <File  name="platform/mbed_sdk_boot.c" type="c"/>
+            <File  name="platform/mbed_semihost_api.c" type="c"/>
+            <File  name="platform/mbed_stats.c" type="c"/>
+            <File  name="platform/mbed_wait_api_no_rtos.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/PeripheralPins.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/system_clock.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/analogin_device.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_adc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_adc_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_can.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_cec.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_cortex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_crc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_dac.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_dac_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_dma.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_eth.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_flash.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_flash_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_gpio.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_gpio_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_hcd.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_i2c.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_i2s.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_irda.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_iwdg.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_mmc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_nand.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_nor.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pccard.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pcd.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pcd_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_pwr.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rcc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rcc_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rtc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_rtc_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_sd.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_smartcard.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_spi.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_spi_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_sram.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_tim.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_tim_ex.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_uart.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_usart.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_hal_wwdg.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_adc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_crc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_dac.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_dma.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_exti.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_fsmc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_gpio.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_i2c.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_pwr.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_rcc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_rtc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_sdmmc.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_spi.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_tim.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_usart.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_usb.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/stm32f1xx_ll_utils.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/device/system_stm32f1xx.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/flash_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/gpio_irq_device.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/pwmout_device.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/serial_device.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/spi_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/analogin_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/analogout_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/can_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/gpio_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/gpio_irq_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/hal_tick_overrides.c" type="c"/>
+            <File  name="targets/TARGET_STM/i2c_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/lp_ticker.c" type="c"/>
+            <File  name="targets/TARGET_STM/mbed_crc_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/mbed_overrides.c" type="c"/>
+            <File  name="targets/TARGET_STM/pinmap.c" type="c"/>
+            <File  name="targets/TARGET_STM/port_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/pwmout_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/rtc_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/serial_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/sleep.c" type="c"/>
+            <File  name="targets/TARGET_STM/stm_spi_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/trng_api.c" type="c"/>
+            <File  name="targets/TARGET_STM/us_ticker.c" type="c"/>
+            <File  name="targets/TARGET_STM/TARGET_STM32F1/TARGET_NUCLEO_F103RB/device/TOOLCHAIN_GCC_ARM/startup_stm32f103xb.S" type="a"/>
+            
+        </Files>
+    </Target>
+</Project>

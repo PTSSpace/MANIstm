@@ -1,5 +1,7 @@
 #include "stm32f103c8t6.h"
 #include "mbed.h"
+#include "rtos.h"
+//#include "mbed_events.h"
 #include "MotorControl.h"
 #include "CANInterface.h"
 
@@ -50,19 +52,20 @@ CANMessage          rxMsg;
 CANMessage          txMsg;
 
 // CAN interface
-UnlockedCAN         can(PA_11, PA_12);                              // CAN rdx pin name, CAN tdx pin name
+UnlockedCAN         can(PB_8, PB_9);                              // CAN rdx pin name, CAN tdx pin name
 CANInterface        ci;
 DigitalOut          canSTB(PA_8);
 
+// Interrupt event queue (MBED OS)
+//EventQueue          com_queue;                                      // Command queue
+//Thread              commandThread(osPriorityAboveNormal);
 
-// Interrupt event queue
-EventQueue          com_queue;                                      // Command queue
-Thread              commandThread(osPriorityHigh);
-
-
-// Interrupt event queue
-//EventQueue          com_queue_;                                   // Command queue
-//Thread commandThread_(osPriorityHigh);
+// CAN command processing thread and signal
+Thread              cmdThread(osPriorityRealtime);
+osThreadId          cmdThreadID;
+// Encoder zeroing processing thread and signal
+Thread              zeroEncThread(osPriorityHigh);
+osThreadId          zeroEncThreadID;
 
 //-----------------------------------------/
 // PID Position/Velocity Control
@@ -70,14 +73,19 @@ Thread              commandThread(osPriorityHigh);
 
 bool zeroEncoder = 0;
 
- bool MotorControl::pid_ = 0;
- Ticker MotorControl::pidTick_;
-
 // Velocity PID control
-MotorControl VelocityControl(PA_6, PA_7, PA_15, PB_3, Vel_Kc, Vel_Ti, Vel_Td, RATE, 1);
+MotorControl VelocityControl(PA_6, PA_7, PA_15, PB_3, Vel_Kc, Vel_Ti, Vel_Td, RATE, 1, DRIVE_ENC_PPR);
 
 // Position control
-MotorControl PositionControl(PB_0, PB_1, PA_9, PA_10, Pos_Kc, Pos_Ti, Pos_Td, RATE, 0);
+MotorControl PositionControl(PB_0, PB_1, PA_9, PA_10, Pos_Kc, Pos_Ti, Pos_Td, RATE, 0, STEER_ENC_PPR);
+
+// PID ticker
+Ticker              pidTick;
+
+// PID control processing thread and signal
+Thread              pidThread(osPriorityAboveNormal);
+osThreadId          pidThreadID;
+
 //****************************************************************************/
 // Declaration - Working variables
 //****************************************************************************/
@@ -116,5 +124,7 @@ volatile bool pid = 0;                                              // PID compu
 void initialize_can_bus(void);                                      // Initialization of can objects and interrupts
 void can_received(void);                                            // CAN message interrupt handler
 void can_publisher(void);                                           // Ticker interrupt handler to set send flag
-void can_publisher_processing(uint8_t, int*, int, int);             // Processor for publisher flag
+bool can_publisher_processing(uint8_t, int*, int, int);             // Processor for publisher flag
 void can_command_processing(void);                                  // Processor thread for message interrupts
+void zero_enc_processing(void);                                     // Processor thread for zeroing encoder
+void pid_processing(void);                                          // Processor thread for pid control
